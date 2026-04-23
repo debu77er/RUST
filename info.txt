@@ -1,3 +1,63 @@
 add SUDO before
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+standard procedure:
+// Step 1:
+cargo new message_box_app
+cd message_box_app
+
+// Step 2:
+[dependencies]
+gtk = { version = "0.15", features = ["v3_24"] }
+
+// Step 3:
+Replace the contents of src/main.rs with the following:
+
+
+use gtk::prelude::*;
+use gtk::{MessageDialog, MessageType, ButtonsType, Window, WindowType};
+
+fn main() {
+    // Initialize GTK application
+    gtk::init().expect("Failed to initialize GTK.");
+
+    // Create a new top-level window
+    let window = Window::new(WindowType::Toplevel);
+    window.set_title("Simple Message Box");
+    window.set_default_size(300, 100);
+
+    // Connect a signal to handle window close
+    window.connect_delete_event(|_, _| {
+        gtk::main_quit();
+        Inhibit(false)
+    });
+
+    // Show the window
+    window.show_all();
+
+    // Create a message dialog
+    let message_dialog = MessageDialog::new(
+        Some(&window),
+        gtk::DialogFlags::MODAL,
+        MessageType::Info,
+        ButtonsType::Ok,
+        "Hello! This is a simple message box.",
+    );
+
+    // Run the message dialog
+    message_dialog.run();
+
+    // Destroy the dialog after it's closed
+    message_dialog.destroy();
+
+    // Start the GTK main event loop
+    gtk::main();
+}
+
+Step 4: Run the application        //Run Forest run MTG
+
+ 
+cargo run
+
+
